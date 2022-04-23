@@ -7,6 +7,7 @@ namespace Schemy
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using UnityEngine;
 
     /// <summary>
     /// Extend the interpreter with essential builtin functionalities
@@ -49,7 +50,8 @@ namespace Schemy
             builtins[Symbol.FromString("null?")] = NativeProcedure.Create<object, bool>(x => x is List<object> && ((List<object>)x).Count == 0, "null?");
             builtins[Symbol.FromString("assert")] = new NativeProcedure(AssertImpl, "assert");
             builtins[Symbol.FromString("load")] = NativeProcedure.Create<string, None>(filename => LoadImpl(interpreter, filename), "load");
-
+            builtins[Symbol.FromString("GetObject")] = NativeProcedure.Create<string,object>(x => GameObject.Find(x));
+            builtins[Symbol.FromString("print")] = new NativeProcedure((args) => { Debug.Log(args); return null;},"print");
             return builtins;
         }
 

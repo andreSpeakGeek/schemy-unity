@@ -9,6 +9,7 @@ namespace Schemy
     using System.Linq;
     using System.Text.RegularExpressions;
     using System.Reflection;
+    using UnityEngine;
 
     public class Interpreter
     {
@@ -16,7 +17,7 @@ namespace Schemy
         private readonly Dictionary<Symbol, Procedure> macroTable;
         private readonly IFileSystemAccessor fsAccessor;
 
-        public delegate IDictionary<Symbol, object>  CreateSymbolTableDelegate(Interpreter interpreter);
+        public delegate IDictionary<Symbol, object> CreateSymbolTableDelegate(Interpreter interpreter);
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Interpreter"/> class.
@@ -47,6 +48,7 @@ namespace Schemy
             {
                 this.Evaluate(iniReader);
             }
+            Debug.LogFormat("<color=green>|Schemy|</color> Initialised {0}", Environment.ToString());
         }
 
         private IEnumerable<TextReader> GetInitializeFiles()
@@ -68,7 +70,6 @@ namespace Schemy
         }
 
         public IFileSystemAccessor FileSystemAccessor { get { return this.fsAccessor; } }
-
         public Environment Environment { get { return this.environment; } }
 
         /// <summary>
@@ -85,6 +86,7 @@ namespace Schemy
                 try
                 {
                     var expr = Expand(Read(port), environment, macroTable, true);
+                        //Debug.LogFormat("<color=green>|Schemy|</color> Evaluating {0}", expr.ToString());
                     if (Symbol.EOF.Equals(expr))
                     {
                         return new EvaluationResult(null, res);
@@ -139,7 +141,7 @@ namespace Schemy
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    Debug.Log(e.Message);
                 }
             }
         }
@@ -574,6 +576,8 @@ namespace Schemy
 
                         if (!string.IsNullOrEmpty(token) && !token.StartsWith(";"))
                         {
+                            //Debug.LogFormat("<color=green>|Schemy|</color> NextToken {0}", token.ToString());
+
                             return token;
                         }
                     }

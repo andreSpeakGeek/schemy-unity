@@ -82,6 +82,16 @@ namespace Schemy
             return null;
         }
 
+        public override string ToString()
+        {
+            string returnval = "";
+            foreach (var item in store.Keys)
+            {
+                returnval += item.ToString();
+            }
+            return returnval;
+        }
+
         public object this[Symbol sym]
         {
             get
